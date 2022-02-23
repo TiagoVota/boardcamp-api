@@ -1,13 +1,13 @@
 import { Router } from 'express'
 
-// import * as exampleController from '../controllers/exampleController.js'
+import * as categoryController from '../controllers/categoryController.js'
 
 
 const router = new Router()
 
-// router.get('', exampleController.controllerFunction)
+router.get('', categoryController.getCategories)
 
-// router.post('', exampleController.controllerFunction)
+router.post('', categoryController.postCategory)
 
 
 export default router
