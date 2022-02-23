@@ -21,7 +21,7 @@ const postGame = async (req, res, next) => {
 	try {
 		const game = await gameService.createGame({ gameInfo })
 		
-		return res.status(200).send(game)
+		return res.status(201).send(game)
 
 	} catch (error) {		
 		next(error)
