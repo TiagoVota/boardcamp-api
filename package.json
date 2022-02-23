@@ -8,26 +8,20 @@
     "start": "node ./src/server.js",
     "start:dev": "node ./src/server.js",
     "start:watch": "npx nodemon ./src/server.js",
-    "start:prod": "NODE_ENV=production node ./src/server.js",
-    "test": "NODE_ENV=test npx jest --run-in-band",
-    "test:watch": "NODE_ENV=test npx jest --run-in-band --watch",
-    "test:coverage": "npx jest --coverage",
-    "deploy": "git push heroku main",
-    "logs": "heroku logs --tail",
-    "first-start": "git init && npx husky install && npx npm-check-updates --target minor -u"
+    "start:prod": "NODE_ENV=production node ./src/server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
-    "dotenv": "^14.3.2",
-    "express": "^4.17.2",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
     "joi": "^17.6.0",
-    "pg": "^8.7.1"
+    "pg": "^8.7.3"
   },
   "devDependencies": {
-    "eslint": "^8.7.0",
+    "eslint": "^8.9.0",
     "husky": "^7.0.4",
     "nodemon": "^2.0.15"
   }
