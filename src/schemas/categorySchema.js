@@ -1,8 +1,8 @@
-import joi from 'joi'
+import Joi from 'joi'
 
 
-const categorySchema = joi.object({
-	name: joi.string().min(2).max(255).required(),
+const categorySchema = Joi.object({
+	name: Joi.string().trim().min(2).max(255).required(),
 }).length(1)
 
 

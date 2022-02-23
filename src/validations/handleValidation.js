@@ -1,8 +1,11 @@
 const validationErrors = ({ objectToValid, objectValidation }) => {
 	const objectError = objectValidation.validate(objectToValid).error
+	const schemaErrorMsg = objectError?.details?.[0]?.message
 
-	if (objectError) return objectError.details[0].message
-	return null
+	return {
+		isValidSchema: !objectError,
+		schemaErrorMsg,
+	}
 }
 
 

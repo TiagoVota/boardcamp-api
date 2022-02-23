@@ -1,13 +1,13 @@
 import { Router } from 'express'
 
-// import * as exampleController from '../controllers/exampleController.js'
+import * as gameController from '../controllers/gameController.js'
 
 
 const router = new Router()
 
-// router.get('', exampleController.controllerFunction)
+router.get('', gameController.getGames)
 
-// router.post('', exampleController.controllerFunction)
+router.post('', gameController.postGame)
 
 
 export default router

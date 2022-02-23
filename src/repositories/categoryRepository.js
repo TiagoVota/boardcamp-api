@@ -2,7 +2,12 @@ import connection from '../database/database.js'
 
 
 const findCategories = async () => {
-	const queryStr = 'SELECT * FROM categories;'
+	const queryStr = `
+		SELECT
+			*
+		FROM
+			categories;
+	`
 	const categoriesPromise = await connection.query(queryStr)
 
 	return categoriesPromise.rows
@@ -11,10 +16,33 @@ const findCategories = async () => {
 
 const findCategoryByName = async ({ name }) => {
 	const queryStr = `
-		SELECT * FROM categories
-			WHERE name = $1;
+		SELECT
+			*
+		FROM
+			categories
+		WHERE
+			name = $1;
 	`
 	const queryArgs = [name]
+	const categoryPromise = await connection.query(queryStr, queryArgs)
+
+	const category = categoryPromise.rows[0]
+
+	if (!category) return null
+	return category
+}
+
+
+const findCategoryById = async ({ id }) => {
+	const queryStr = `
+		SELECT
+			*
+		FROM
+			categories
+		WHERE
+			id = $1;
+	`
+	const queryArgs = [id]
 	const categoryPromise = await connection.query(queryStr, queryArgs)
 
 	const category = categoryPromise.rows[0]
@@ -43,5 +71,6 @@ const insertCategory = async ({ name }) => {
 export {
 	findCategories,
 	findCategoryByName,
+	findCategoryById,
 	insertCategory,
 }
