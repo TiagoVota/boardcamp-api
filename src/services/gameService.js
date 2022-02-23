@@ -18,7 +18,7 @@ const listGames = async ({ name }) => {
 
 	if (!isValidSchema) throw new SchemaError(schemaErrorMsg)
 	
-	const games = await gameRepository.findGames({ name })
+	const games = await gameRepository.findGames({ name: name || '' })
 
 	return games
 }

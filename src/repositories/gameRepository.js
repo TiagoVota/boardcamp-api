@@ -3,9 +3,16 @@ import connection from '../database/database.js'
 
 const findGames = async ({ name }) => {
 	const queryStr = `
-		SELECT * FROM games;
+		SELECT
+			*
+		FROM
+			games
+		WHERE
+			name ILIKE $1;
 	`
-	const gamesPromise = await connection.query(queryStr)
+	const queryArgs = [`${name}%`]
+
+	const gamesPromise = await connection.query(queryStr, queryArgs)
 
 	return gamesPromise.rows
 }
@@ -13,8 +20,11 @@ const findGames = async ({ name }) => {
 
 const findGameByName = async ({ name }) => {
 	const queryStr = `
-		SELECT * FROM games
-			WHERE name = $1;
+		SELECT
+			*
+		FROM
+			games
+		WHERE name = $1;
 	`
 	const queryArgs = [name]
 	const gamePromise = await connection.query(queryStr, queryArgs)
