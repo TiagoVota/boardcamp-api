@@ -7,7 +7,21 @@ const getCustomers = async (req, res, next) => {
 	try {
 		const customers = await customerService.listCustomers({ cpf })
 		
-		return res.status(201).send(customers)
+		return res.status(200).send(customers)
+
+	} catch (error) {		
+		next(error)
+	}
+}
+
+
+const getCustomer = async (req, res, next) => {
+	const { params: { customerId } } = req
+
+	try {
+		const customer = await customerService.takeCustomer({ customerId })
+		
+		return res.status(200).send(customer)
 
 	} catch (error) {		
 		next(error)
@@ -31,4 +45,5 @@ const getCustomers = async (req, res, next) => {
 
 export {
 	getCustomers,
+	getCustomer,
 }

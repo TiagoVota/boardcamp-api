@@ -6,7 +6,7 @@ import * as customerController from '../controllers/customerController.js'
 const router = new Router()
 
 router.get('', customerController.getCustomers)
-// router.get('/:customerId', customerController.controllerFunction)
+router.get('/:customerId', customerController.getCustomer)
 
 // router.post('', customerController.controllerFunction)
 

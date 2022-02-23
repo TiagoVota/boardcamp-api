@@ -1,8 +1,10 @@
 import * as customerRepository from '../repositories/customerRepository.js'
+
 import * as customerSchema from '../schemas/customerSchema.js'
 
 import { validationErrors } from '../validations/handleValidation.js'
 
+import InexistentIdError from '../errors/InexistentIdError.js'
 import SchemaError from '../errors/SchemaError.js'
 
 
@@ -17,6 +19,24 @@ const listCustomers = async ({ cpf }) => {
 	const customers = await customerRepository.findCustomers({ cpf })
 
 	return customers
+}
+
+
+const takeCustomer = async ({ customerId }) => {
+	const { isValidSchema, schemaErrorMsg } = validationErrors({
+		objectToValid: { customerId },
+		objectValidation: customerSchema.customerIdSchema
+	})
+	
+	if (!isValidSchema) throw new SchemaError(schemaErrorMsg)
+
+	const customer = await customerRepository.findCustomerById({ id: customerId })
+	if (customer === null) throw new InexistentIdError({
+		id: customerId,
+		type: 'customer',
+	})
+
+	return customer
 }
 
 
@@ -36,4 +56,5 @@ const listCustomers = async ({ cpf }) => {
 
 export {
 	listCustomers,
+	takeCustomer,
 }

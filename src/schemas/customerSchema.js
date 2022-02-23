@@ -2,7 +2,11 @@ import Joi from 'joi'
 
 
 const customerQuerySchema = Joi.object({
-	cpf: Joi.string().trim().alphanum().min(0).max(11)
+	cpf: Joi.string().trim().alphanum().min(0).max(11),
+})
+
+const customerIdSchema = Joi.object({
+	customerId: Joi.number().integer().min(1).required(),
 })
 
 const customerSchema = Joi.object({
@@ -16,5 +20,6 @@ const customerSchema = Joi.object({
 
 export {
 	customerQuerySchema,
+	customerIdSchema,
 	customerSchema,
 }
