@@ -14,9 +14,9 @@ package-lock.json
 
 # misc
 .DS_Store
-# .env
-# .env.test
-# .env.dev
+.env
+.env.test
+.env.dev
 .env.local
 .env.development.local
 .env.test.local
@@ -28,8 +28,8 @@ yarn-error.log*
 
 
 # Remove all examples files from git of this boilerplate 
-# example*
-# Example*
+example*
+Example*
 
 # README in progress...
-# README.md
+README.md
