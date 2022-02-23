@@ -1,8 +1,8 @@
 class ConflictAttributeError extends Error {
-	constructor({ name, type }) {
+	constructor({ value, atribute, table }) {
 		super('ConflictAttributeError')
 		this.name = 'ConflictAttributeError'
-		this.message = `"${name}" already exists in "${type}"!`
+		this.message = `"${value}" ${atribute} already exists in "${table}"!`
 		this.status = 409
 	}
 }

@@ -1,8 +1,10 @@
 import Joi from 'joi'
 
+import { numericRegex } from '../factories/regexFactory.js'
+
 
 const customerQuerySchema = Joi.object({
-	cpf: Joi.string().trim().alphanum().min(0).max(11),
+	cpf: Joi.string().trim().pattern(numericRegex(0, 11)),
 })
 
 const customerIdSchema = Joi.object({
@@ -11,10 +13,9 @@ const customerIdSchema = Joi.object({
 
 const customerSchema = Joi.object({
 	name: Joi.string().trim().min(2).max(255).required(),
-	image: Joi.string().trim().required(),
-	stockTotal: Joi.number().integer().min(1).required(),
-	categoryId: Joi.number().integer().min(1).required(),
-	pricePerDay: Joi.number().integer().min(1).required(),
+	phone: Joi.string().trim().pattern(numericRegex(10, 11)).required(),
+	cpf: Joi.string().trim().pattern(numericRegex(11)).required(),
+	birthday: Joi.date().iso().required(),
 })
 
 

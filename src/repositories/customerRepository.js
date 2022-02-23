@@ -12,9 +12,9 @@ const findCustomers = async ({ cpf }) => {
 	`
 	const queryArgs = [`${cpf}%`]
 
-	const gamesPromise = await connection.query(queryStr, queryArgs)
+	const customersPromise = await connection.query(queryStr, queryArgs)
 
-	return gamesPromise.rows
+	return customersPromise.rows
 }
 
 
@@ -29,15 +29,54 @@ const findCustomerById = async ({ id }) => {
 	`
 	const queryArgs = [id]
 
-	const gamePromise = await connection.query(queryStr, queryArgs)
-	const game = gamePromise.rows[0]
+	const customerPromise = await connection.query(queryStr, queryArgs)
+	const customer = customerPromise.rows[0]
 
-	if (!game) return null
-	return game
+	if (!customer) return null
+	return customer
+}
+
+
+const findCustomerByCpf = async ({ cpf }) => {
+	const queryStr = `
+		SELECT
+			*
+		FROM
+			customers
+		WHERE
+			cpf = $1;
+	`
+	const queryArgs = [cpf]
+
+	const customerPromise = await connection.query(queryStr, queryArgs)
+	const customer = customerPromise.rows[0]
+
+	if (!customer) return null
+	return customer
+}
+
+
+const insertCustomer = async (customerInfo) => {
+	const { name, phone, cpf, birthday } = customerInfo
+	const queryStr = `
+		INSERT INTO customers
+			(name, phone, cpf, birthday)
+		VALUES
+			($1, $2, $3, $4)
+		RETURNING
+			*;
+	`
+	const queryArgs = [name, phone, cpf, birthday]
+
+	const customerPromise = await connection.query(queryStr, queryArgs)
+
+	return customerPromise.rows[0]
 }
 
 
 export {
 	findCustomers,
 	findCustomerById,
+	findCustomerByCpf,
+	insertCustomer,
 }

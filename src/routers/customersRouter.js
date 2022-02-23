@@ -8,7 +8,7 @@ const router = new Router()
 router.get('', customerController.getCustomers)
 router.get('/:customerId', customerController.getCustomer)
 
-// router.post('', customerController.controllerFunction)
+router.post('', customerController.postCustomer)
 
 // router.put('/:customerId', customerController.controllerFunction)
 

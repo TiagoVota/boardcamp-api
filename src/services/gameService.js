@@ -34,7 +34,11 @@ const createGame = async ({ gameInfo }) => {
 	const { name, categoryId } = gameInfo
 	
 	const existentGame = await gameRepository.findGameByName({ name })
-	if (existentGame) throw new ConflictAttributeError({ name, type: 'games' })
+	if (existentGame) throw new ConflictAttributeError({
+		value: name,
+		atribute: 'name',
+		table: 'games',
+	})
 
 	const existentCategory = await categoryRepository
 		.findCategoryById({ id: categoryId })

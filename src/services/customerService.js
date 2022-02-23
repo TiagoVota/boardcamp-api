@@ -4,6 +4,7 @@ import * as customerSchema from '../schemas/customerSchema.js'
 
 import { validationErrors } from '../validations/handleValidation.js'
 
+import ConflictAttributeError from '../errors/ConflictAttributeError.js'
 import InexistentIdError from '../errors/InexistentIdError.js'
 import SchemaError from '../errors/SchemaError.js'
 
@@ -40,6 +41,28 @@ const takeCustomer = async ({ customerId }) => {
 }
 
 
+const sendCustomer = async ({ customerInfo }) => {
+	const { isValidSchema, schemaErrorMsg } = validationErrors({
+		objectToValid: customerInfo,
+		objectValidation: customerSchema.customerSchema
+	})
+	
+	if (!isValidSchema) throw new SchemaError(schemaErrorMsg)
+	const { cpf } = customerInfo
+
+	const existentCustomer = await customerRepository.findCustomerByCpf({ cpf })
+	if (existentCustomer) throw new ConflictAttributeError({
+		value: cpf,
+		atribute: 'cpf',
+		table: 'customers',
+	})
+
+	const customer = await customerRepository.insertCustomer(customerInfo)
+
+	return customer
+}
+
+
 // const serviceFunction = async (customerInfo) => {
 // 	const customerErrors = validationErrors({
 // 		objectToValid: customerInfo,
@@ -57,4 +80,5 @@ const takeCustomer = async ({ customerId }) => {
 export {
 	listCustomers,
 	takeCustomer,
+	sendCustomer,
 }

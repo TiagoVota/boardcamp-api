@@ -28,6 +28,19 @@ const getCustomer = async (req, res, next) => {
 	}
 }
 
+const postCustomer = async (req, res, next) => {
+	const { body: customerInfo } = req
+
+	try {
+		const customer = await customerService.sendCustomer({ customerInfo })
+		
+		return res.status(201).send(customer)
+
+	} catch (error) {		
+		next(error)
+	}
+}
+
 
 // const getCustomers = async (req, res, next) => {
 // 	const { body: customerInfo } = req
@@ -46,4 +59,5 @@ const getCustomer = async (req, res, next) => {
 export {
 	getCustomers,
 	getCustomer,
+	postCustomer,
 }
