@@ -1,10 +1,11 @@
 import * as categoryRepository from '../repositories/categoryRepository.js'
+
 import * as categorySchema from '../schemas/categorySchema.js'
 
 import { validationErrors } from '../validations/handleValidation.js'
 
 import SchemaError from '../errors/SchemaError.js'
-import ConflictAtributeError from '../errors/ConflictAtributeError.js'
+import ConflictAttributeError from '../errors/ConflictAttributeError.js'
 
 
 const listCategories = async () => {
@@ -15,16 +16,16 @@ const listCategories = async () => {
 
 
 const createCategory = async ({ categoryInfo }) => {
-	const categoryErrors = validationErrors({
+	const { isValidSchema, schemaErrorMsg } = validationErrors({
 		objectToValid: categoryInfo,
 		objectValidation: categorySchema.categorySchema
 	})
-
-	if (categoryErrors) throw new SchemaError(categoryErrors)
+	
+	if (!isValidSchema) throw new SchemaError(schemaErrorMsg)
 	const { name } = categoryInfo
 
 	const existentCategory = await categoryRepository.findCategoryByName({ name })
-	if (existentCategory) throw new ConflictAtributeError({ name, type: 'category' })
+	if (existentCategory) throw new ConflictAttributeError({ name, type: 'category' })
 
 	const result = await categoryRepository.insertCategory({ name })
 

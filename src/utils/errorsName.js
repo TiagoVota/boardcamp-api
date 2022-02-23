@@ -1,5 +1,5 @@
 const errorsName = [
-	'ConflictAtributeError',
+	'ConflictAttributeError',
 	'SchemaError',
 ]
 
