@@ -17,7 +17,7 @@ const listCustomers = async ({ cpf }) => {
 	
 	if (!isValidSchema) throw new SchemaError(schemaErrorMsg)
 
-	const customers = await customerRepository.findCustomers({ cpf })
+	const customers = await customerRepository.findCustomers({ cpf: cpf || '' })
 
 	return customers
 }
