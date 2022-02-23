@@ -24,6 +24,21 @@ const findCategoryByName = async ({ name }) => {
 }
 
 
+const findCategoryById = async ({ id }) => {
+	const queryStr = `
+		SELECT * FROM categories
+			WHERE id = $1;
+	`
+	const queryArgs = [id]
+	const categoryPromise = await connection.query(queryStr, queryArgs)
+
+	const category = categoryPromise.rows[0]
+
+	if (!category) return null
+	return category
+}
+
+
 const insertCategory = async ({ name }) => {
 	const queryStr = `
 		INSERT INTO categories
@@ -43,5 +58,6 @@ const insertCategory = async ({ name }) => {
 export {
 	findCategories,
 	findCategoryByName,
+	findCategoryById,
 	insertCategory,
 }

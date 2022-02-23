@@ -7,7 +7,7 @@ const router = new Router()
 
 router.get('', gameController.getGames)
 
-// router.post('', gameController.postGame)
+router.post('', gameController.postGame)
 
 
 export default router
