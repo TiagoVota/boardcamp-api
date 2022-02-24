@@ -37,7 +37,7 @@ const countGameRentals = async ({ gameId }) => {
 		FROM
 			rentals
 		WHERE
-			"gameId" = $1;
+			"gameId" = $1 AND "returnDate" IS NULL;
 	`
 	const queryArgs = [gameId]
 	const gameResult = await connection.query(queryStr, queryArgs)
