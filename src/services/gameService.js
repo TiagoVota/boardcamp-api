@@ -5,9 +5,9 @@ import * as gameSchema from '../schemas/gameSchema.js'
 
 import { validationErrors } from '../validations/handleValidation.js'
 
-import SchemaError from '../errors/SchemaError.js'
 import ConflictAttributeError from '../errors/ConflictAttributeError.js'
 import InexistentIdError from '../errors/InexistentIdError.js'
+import SchemaError from '../errors/SchemaError.js'
 
 
 const listGames = async ({ name }) => {
@@ -34,13 +34,18 @@ const createGame = async ({ gameInfo }) => {
 	const { name, categoryId } = gameInfo
 	
 	const existentGame = await gameRepository.findGameByName({ name })
-	if (existentGame) throw new ConflictAttributeError({ name, type: 'games' })
+	if (existentGame) throw new ConflictAttributeError({
+		value: name,
+		atribute: 'name',
+		table: 'games',
+	})
 
-	const existentCategory = await categoryRepository
-		.findCategoryById({ id: categoryId })
+	const existentCategory = await categoryRepository.findCategoryById({
+		id: categoryId
+	})
 	if (existentCategory === null) throw new InexistentIdError({
 		id: categoryId,
-		type: 'category'
+		table: 'categories'
 	})
 
 	const game = await gameRepository.insertGame(gameInfo)

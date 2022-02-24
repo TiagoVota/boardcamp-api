@@ -1,16 +1,16 @@
 import { Router } from 'express'
 
-// import * as exampleController from '../controllers/exampleController.js'
+import * as customerController from '../controllers/customerController.js'
 
 
 const router = new Router()
 
-// router.get('', exampleController.controllerFunction)
-// router.get('/:customerId', exampleController.controllerFunction)
+router.get('', customerController.getCustomers)
+router.get('/:customerId', customerController.getCustomer)
 
-// router.post('', exampleController.controllerFunction)
+router.post('', customerController.postCustomer)
 
-// router.put('/:customerId', exampleController.controllerFunction)
+router.put('/:customerId', customerController.editCustomer)
 
 
 export default router

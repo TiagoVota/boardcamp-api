@@ -25,7 +25,11 @@ const createCategory = async ({ categoryInfo }) => {
 	const { name } = categoryInfo
 
 	const existentCategory = await categoryRepository.findCategoryByName({ name })
-	if (existentCategory) throw new ConflictAttributeError({ name, type: 'category' })
+	if (existentCategory) throw new ConflictAttributeError({
+		value: name,
+		atribute: 'name',
+		table: 'category',
+	})
 
 	const result = await categoryRepository.insertCategory({ name })
 
