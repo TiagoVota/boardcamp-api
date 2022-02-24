@@ -107,10 +107,27 @@ const updateRental = async ({ id, returnDate, delayFee }) => {
 }
 
 
+const deleteRental = async ({ id }) => {
+	const queryStr = `
+		DELETE FROM
+			rentals
+		WHERE
+				id = $1
+		RETURNING
+			*;
+	`
+	const queryArgs = [id]
+	const gameResult = await connection.query(queryStr, queryArgs)
+
+	return gameResult.rows[0]
+}
+
+
 export {
 	findRentals,
 	findRentalById,
 	countGameRentals,
 	insertRental,
 	updateRental,
+	deleteRental,
 }

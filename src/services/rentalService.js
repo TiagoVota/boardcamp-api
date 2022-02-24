@@ -85,7 +85,7 @@ const returnRental = async ({ rentalId }) => {
 		table: 'rentals',
 	})
 	const { returnDate, rentDate, daysRented, originalPrice } = toUpdateRental
-	
+
 	const pricePerDay = Number(originalPrice) / Number(daysRented)
 
 	if (returnDate !== null) throw new RentalFinalizedError({ id: rentalId })
@@ -100,17 +100,26 @@ const returnRental = async ({ rentalId }) => {
 }
 
 
-const serviceFunction = async (rentalInfo) => {
+const removeRental = async ({ rentalId }) => {
 	const { isValidSchema, schemaErrorMsg } = validationErrors({
-		objectToValid: rentalInfo,
-		objectValidation: rentalSchema.rentalSchema
+		objectToValid: { rentalId },
+		objectValidation: rentalSchema.rentalIdSchema
 	})
 	
 	if (!isValidSchema) throw new SchemaError(schemaErrorMsg)
+	
+	const toDeleteRental = await rentalRepository.findRentalById({ id: rentalId })
+	if (!toDeleteRental) throw new InexistentIdError({
+		id: rentalId,
+		table: 'rentals',
+	})
+	const { returnDate } = toDeleteRental
 
-	const result = await rentalRepository.repositoryFunction(rentalInfo)
+	if (returnDate !== null) throw new RentalFinalizedError({ id: rentalId })
+	
+	const rental = await rentalRepository.deleteRental({ id: rentalId })
 
-	return result
+	return rental
 }
 
 
@@ -118,4 +127,5 @@ export {
 	listRentals,
 	sendRental,
 	returnRental,
+	removeRental,
 }

@@ -43,13 +43,12 @@ const postReturnRental = async (req, res, next) => {
 }
 
 
-const controllerFunction = async (req, res, next) => {
-	const { body: rentalInfo } = req
-
+const deleteRental = async (req, res, next) => {
+	const { params: { rentalId } } = req
 	try {
-		const rentals = await rentalService.serviceFunction(rentalInfo)
+		const rental = await rentalService.removeRental({ rentalId })
 		
-		return res.status(201).send(rentals)
+		return res.status(200).send(rental)
 
 	} catch (error) {		
 		next(error)
@@ -61,4 +60,5 @@ export {
 	getRentals,
 	postRental,
 	postReturnRental,
+	deleteRental,
 }

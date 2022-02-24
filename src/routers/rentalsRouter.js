@@ -10,7 +10,7 @@ router.get('', rentalController.getRentals)
 router.post('', rentalController.postRental)
 router.post('/:rentalId/return', rentalController.postReturnRental)
 
-// router.delete('/:rentalId', rentalController.controllerFunction)
+router.delete('/:rentalId', rentalController.deleteRental)
 
 
 export default router
