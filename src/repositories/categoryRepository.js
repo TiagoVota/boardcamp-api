@@ -8,9 +8,9 @@ const findCategories = async () => {
 		FROM
 			categories;
 	`
-	const categoriesPromise = await connection.query(queryStr)
+	const categoriesResult = await connection.query(queryStr)
 
-	return categoriesPromise.rows
+	return categoriesResult.rows
 }
 
 
@@ -24,9 +24,9 @@ const findCategoryByName = async ({ name }) => {
 			name = $1;
 	`
 	const queryArgs = [name]
-	const categoryPromise = await connection.query(queryStr, queryArgs)
+	const categoryResult = await connection.query(queryStr, queryArgs)
 
-	const category = categoryPromise.rows[0]
+	const category = categoryResult.rows[0]
 
 	if (!category) return null
 	return category
@@ -43,9 +43,9 @@ const findCategoryById = async ({ id }) => {
 			id = $1;
 	`
 	const queryArgs = [id]
-	const categoryPromise = await connection.query(queryStr, queryArgs)
+	const categoryResult = await connection.query(queryStr, queryArgs)
 
-	const category = categoryPromise.rows[0]
+	const category = categoryResult.rows[0]
 
 	if (!category) return null
 	return category
@@ -62,9 +62,9 @@ const insertCategory = async ({ name }) => {
 			*;
 	`
 	const queryArgs = [name]
-	const categoryPromise = await connection.query(queryStr, queryArgs)
+	const categoryResult = await connection.query(queryStr, queryArgs)
 
-	return categoryPromise.rows[0]
+	return categoryResult.rows[0]
 }
 
 

@@ -12,9 +12,9 @@ const findGames = async ({ name }) => {
 	`
 	const queryArgs = [`${name}%`]
 
-	const gamesPromise = await connection.query(queryStr, queryArgs)
+	const gamesResult = await connection.query(queryStr, queryArgs)
 
-	return gamesPromise.rows
+	return gamesResult.rows
 }
 
 
@@ -27,9 +27,9 @@ const findGameByName = async ({ name }) => {
 		WHERE name = $1;
 	`
 	const queryArgs = [name]
-	const gamePromise = await connection.query(queryStr, queryArgs)
+	const gameResult = await connection.query(queryStr, queryArgs)
 	
-	const game = gamePromise.rows[0]
+	const game = gameResult.rows[0]
 
 	if (!game) return null
 	return game
@@ -48,9 +48,9 @@ const insertGame = async (gameInfo) => {
 			*;
 	`
 	const queryArgs = [name, image, stockTotal, categoryId, pricePerDay]
-	const gamePromise = await connection.query(queryStr, queryArgs)
+	const gameResult = await connection.query(queryStr, queryArgs)
 
-	return gamePromise.rows[0]
+	return gameResult.rows[0]
 }
 
 
