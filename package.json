@@ -9,13 +9,14 @@
     "start:dev": "node ./src/server.js",
     "start:watch": "npx nodemon ./src/server.js",
     "start:prod": "NODE_ENV=production node ./src/server.js",
-		"git:update": "git add . && git status"
+    "git:update": "git add . && git status"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "dayjs": "^1.10.7",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "joi": "^17.6.0",

@@ -1,6 +1,7 @@
 const errorsName = [
 	'ConflictAttributeError',
 	'InexistentIdError',
+	'NoStockError',
 	'SchemaError',
 ]
 

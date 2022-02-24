@@ -36,6 +36,24 @@ const findGameByName = async ({ name }) => {
 }
 
 
+const findGameById = async ({ id }) => {
+	const queryStr = `
+		SELECT
+			*
+		FROM
+			games
+		WHERE id = $1;
+	`
+	const queryArgs = [id]
+	const gameResult = await connection.query(queryStr, queryArgs)
+	
+	const game = gameResult.rows[0]
+
+	if (!game) return null
+	return game
+}
+
+
 const insertGame = async (gameInfo) => {
 	const { name, image, stockTotal, categoryId, pricePerDay } = gameInfo
 
@@ -57,5 +75,6 @@ const insertGame = async (gameInfo) => {
 export {
 	findGames,
 	findGameByName,
+	findGameById,
 	insertGame,
 }

@@ -7,7 +7,7 @@ const router = new Router()
 
 router.get('', rentalController.getRentals)
 
-// router.post('', rentalController.controllerFunction)
+router.post('', rentalController.postRental)
 // router.post('/:rentalId/return', rentalController.controllerFunction)
 
 // router.delete('/:rentalId', rentalController.controllerFunction)

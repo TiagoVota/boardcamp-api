@@ -15,6 +15,20 @@ const getRentals = async (req, res, next) => {
 }
 
 
+const postRental = async (req, res, next) => {
+	const { body: rentalInfo } = req
+
+	try {
+		const rentals = await rentalService.sendRentals({ rentalInfo })
+		
+		return res.status(201).send(rentals)
+
+	} catch (error) {		
+		next(error)
+	}
+}
+
+
 const controllerFunction = async (req, res, next) => {
 	const { body: rentalInfo } = req
 
@@ -31,4 +45,5 @@ const controllerFunction = async (req, res, next) => {
 
 export {
 	getRentals,
+	postRental,
 }
