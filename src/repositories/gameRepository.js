@@ -4,11 +4,16 @@ import connection from '../database/database.js'
 const findGames = async ({ name }) => {
 	const queryStr = `
 		SELECT
-			*
+			g.*,
+			c.name AS "categoryName"
 		FROM
-			games
+			games AS g
+		JOIN
+			categories AS c
+		ON
+			g."categoryId" = c.id
 		WHERE
-			name ILIKE $1;
+			g.name ILIKE $1;
 	`
 	const queryArgs = [`${name}%`]
 
