@@ -1,8 +1,8 @@
 class InexistentIdError extends Error {
-	constructor({ id, type }) {
+	constructor({ id, table }) {
 		super('InexistentIdError')
 		this.name = 'InexistentIdError'
-		this.message = `"${id}" id no exists in "${type}"!`
+		this.message = `"${id}" id no exists in "${table}"!`
 		this.status = 404
 	}
 }

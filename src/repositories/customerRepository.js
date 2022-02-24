@@ -33,7 +33,7 @@ const findCustomerById = async ({ id }) => {
 	const customer = customerPromise.rows[0]
 
 	if (!customer) return null
-	return customer
+	return customerPromise.rows[0]
 }
 
 
@@ -74,9 +74,33 @@ const insertCustomer = async (customerInfo) => {
 }
 
 
+const updateCustomer = async (customerInfo) => {
+	const { name, phone, cpf, birthday, id } = customerInfo
+	const queryStr = `
+		UPDATE
+			customers
+		SET
+			name = $1, 
+			phone = $2, 
+			cpf = $3, 
+			birthday = $4
+		WHERE
+			id = $5
+		RETURNING
+			*;
+	`
+	const queryArgs = [name, phone, cpf, birthday, id]
+
+	const customerPromise = await connection.query(queryStr, queryArgs)
+
+	return customerPromise.rows[0]
+}
+
+
 export {
 	findCustomers,
 	findCustomerById,
 	findCustomerByCpf,
 	insertCustomer,
+	updateCustomer,
 }

@@ -40,11 +40,12 @@ const createGame = async ({ gameInfo }) => {
 		table: 'games',
 	})
 
-	const existentCategory = await categoryRepository
-		.findCategoryById({ id: categoryId })
+	const existentCategory = await categoryRepository.findCategoryById({
+		id: categoryId
+	})
 	if (existentCategory === null) throw new InexistentIdError({
 		id: categoryId,
-		type: 'category'
+		table: 'categories'
 	})
 
 	const game = await gameRepository.insertGame(gameInfo)

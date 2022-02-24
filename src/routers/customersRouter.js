@@ -10,7 +10,7 @@ router.get('/:customerId', customerController.getCustomer)
 
 router.post('', customerController.postCustomer)
 
-// router.put('/:customerId', customerController.controllerFunction)
+router.put('/:customerId', customerController.editCustomer)
 
 
 export default router

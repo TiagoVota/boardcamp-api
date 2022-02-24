@@ -42,22 +42,27 @@ const postCustomer = async (req, res, next) => {
 }
 
 
-// const getCustomers = async (req, res, next) => {
-// 	const { body: customerInfo } = req
+const editCustomer = async (req, res, next) => {
+	const {
+		body: customerInfo,
+		params: { customerId }
+	} = req
 
-// 	try {
-// 		const result = await customerService.serviceFunction(customerInfo)
+	try {
+		const customer = await customerService
+			.changeCustomer({ customerInfo, customerId })
 		
-// 		return res.status(201).send(result)
+		return res.status(200).send(customer)
 
-// 	} catch (error) {		
-// 		next(error)
-// 	}
-// }
+	} catch (error) {		
+		next(error)
+	}
+}
 
 
 export {
 	getCustomers,
 	getCustomer,
 	postCustomer,
+	editCustomer,
 }

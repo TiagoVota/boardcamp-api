@@ -2,6 +2,8 @@ import * as customerRepository from '../repositories/customerRepository.js'
 
 import * as customerSchema from '../schemas/customerSchema.js'
 
+import * as customerHelper from '../helper/customerHelper.js'
+
 import { validationErrors } from '../validations/handleValidation.js'
 
 import ConflictAttributeError from '../errors/ConflictAttributeError.js'
@@ -34,7 +36,7 @@ const takeCustomer = async ({ customerId }) => {
 	const customer = await customerRepository.findCustomerById({ id: customerId })
 	if (customer === null) throw new InexistentIdError({
 		id: customerId,
-		type: 'customer',
+		table: 'customers',
 	})
 
 	return customer
@@ -63,22 +65,62 @@ const sendCustomer = async ({ customerInfo }) => {
 }
 
 
-// const serviceFunction = async (customerInfo) => {
-// 	const customerErrors = validationErrors({
-// 		objectToValid: customerInfo,
-// 		objectValidation: customerSchema.customerSchema
-// 	})
+const changeCustomer = async ({ customerInfo, customerId }) => {
+	const {
+		isValidSchema: isValidCustomer,
+		schemaErrorMsg: customerErros
+	} = validationErrors({
+		objectToValid: customerInfo,
+		objectValidation: customerSchema.customerSchema
+	})
 
-// 	if (customerErrors) throw new SchemaError(customerErrors)
+	if (!isValidCustomer) throw new SchemaError(customerErros)
 
-// 	const result = await customerRepository.repositoryFunction(customerInfo)
+	const {
+		isValidSchema: isValidId,
+		schemaErrorMsg: IdErros
+	} = validationErrors({
+		objectToValid: { customerId },
+		objectValidation: customerSchema.customerIdSchema
+	})
+	
+	if (!isValidId) throw new SchemaError(IdErros)
 
-// 	return result
-// }
+	const { cpf } = customerInfo
+
+	const toUpdateCustomer = await customerRepository.findCustomerById({
+		id: customerId
+	})
+	if (!toUpdateCustomer) throw new InexistentIdError({
+		id: customerId,
+		table: 'customers'
+	})
+	
+	const existentCustomer = await customerRepository.findCustomerByCpf({ cpf })
+	
+	const isValidUpdate = customerHelper.validateUpdate(
+		customerId,
+		existentCustomer
+	)
+
+	if (!isValidUpdate) throw new ConflictAttributeError({
+		value: cpf,
+		atribute: 'cpf',
+		table: 'customers',
+	})
+
+	const customer = await customerRepository.updateCustomer({
+		...customerInfo,
+		id: customerId
+	})
+
+	return customer
+}
 
 
 export {
 	listCustomers,
 	takeCustomer,
 	sendCustomer,
+	changeCustomer,
 }
