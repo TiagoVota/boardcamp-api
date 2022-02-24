@@ -1,15 +1,38 @@
+import * as queryStrHelper from '../helper/queryStrHelper.js'
+
 import connection from '../database/database.js'
 
 
 const findRentals = async ({ customerId, gameId }) => {
-	let queryStr = `
+	const baseQueryStr = `
 		SELECT
-			*
+			r.*,
+			cus.name AS "customerName",
+			g.name AS "gameName", g."categoryId",
+			cat.name AS "categoryName"
 		FROM
-			rentals;
+			rentals AS r
+		JOIN
+			customers AS cus
+		ON
+			r."customerId" = cus.id
+		JOIN
+			games AS g
+		ON
+			r."gameId" = g.id
+		JOIN
+			categories AS cat
+		ON
+			g."categoryId" = cat."id"
 	`
 
-	const rentalsResult = await connection.query(queryStr)
+	const { queryStr, queryArgs } = queryStrHelper.makeGetRentalQueryStr(
+		baseQueryStr,
+		customerId,
+		gameId
+	)
+
+	const rentalsResult = await connection.query(queryStr, queryArgs)
 
 	return rentalsResult.rows
 }

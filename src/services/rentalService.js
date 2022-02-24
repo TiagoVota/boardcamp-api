@@ -25,7 +25,9 @@ const listRentals = async ({ customerId, gameId }) => {
 
 	const rentals = await rentalRepository.findRentals({ customerId, gameId })
 
-	return rentals
+	const sanitizedRentals = rentalHelper.sanitizeRentals(rentals)
+
+	return sanitizedRentals
 }
 
 
