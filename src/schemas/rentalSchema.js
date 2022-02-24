@@ -12,8 +12,12 @@ const rentalSchema = Joi.object({
 	daysRented: Joi.number().integer().min(1).required(),
 }).length(3)
 
+const rentalIdSchema = Joi.object({
+	rentalId: Joi.number().integer().min(1).required(),
+}).length(1)
 
 export {
 	rentalQuerySchema,
 	rentalSchema,
+	rentalIdSchema,
 }

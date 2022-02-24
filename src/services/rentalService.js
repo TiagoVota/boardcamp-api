@@ -4,11 +4,14 @@ import * as rentalRepository from '../repositories/rentalRepository.js'
 
 import * as rentalSchema from '../schemas/rentalSchema.js'
 
+import * as rentalHelper from '../helper/rentalHelper.js'
+
 import { validationErrors } from '../validations/handleValidation.js'
 import { formatDateISO } from '../utils/dayjs.service.js'
 
 import InexistentIdError from '../errors/InexistentIdError.js'
 import NoStockError from '../errors/NoStockError.js'
+import RentalFinalizedError from '../errors/RentalFinalizedError.js'
 import SchemaError from '../errors/SchemaError.js'
 
 
@@ -26,7 +29,7 @@ const listRentals = async ({ customerId, gameId }) => {
 }
 
 
-const sendRentals = async ({ rentalInfo }) => {
+const sendRental = async ({ rentalInfo }) => {
 	const { isValidSchema, schemaErrorMsg } = validationErrors({
 		objectToValid: rentalInfo,
 		objectValidation: rentalSchema.rentalSchema
@@ -51,7 +54,6 @@ const sendRentals = async ({ rentalInfo }) => {
 		table: 'games'
 	})
 	const { stockTotal, name: gameName, pricePerDay } = existentGame
-	console.log({ total: Number(daysRented) * Number(pricePerDay) })
 
 	const totalGameRentals = await rentalRepository.countGameRentals({ gameId })
 
@@ -59,10 +61,39 @@ const sendRentals = async ({ rentalInfo }) => {
 
 	const rental = await rentalRepository.insertRental({
 		...rentalInfo,
-		rentDate: formatDateISO(new Date()),
+		rentDate: formatDateISO(),
 		returnDate: null,
 		originalPrice: Number(daysRented) * Number(pricePerDay),
 		delayFee: null,
+	})
+
+	return rental
+}
+
+
+const returnRental = async ({ rentalId }) => {
+	const { isValidSchema, schemaErrorMsg } = validationErrors({
+		objectToValid: { rentalId },
+		objectValidation: rentalSchema.rentalIdSchema
+	})
+	
+	if (!isValidSchema) throw new SchemaError(schemaErrorMsg)
+
+	const toUpdateRental = await rentalRepository.findRentalById({ id: rentalId })
+	if (!toUpdateRental) throw new InexistentIdError({
+		id: rentalId,
+		table: 'rentals',
+	})
+	const { returnDate, rentDate, daysRented, originalPrice } = toUpdateRental
+	
+	const pricePerDay = Number(originalPrice) / Number(daysRented)
+
+	if (returnDate !== null) throw new RentalFinalizedError({ id: rentalId })
+
+	const rental = await rentalRepository.updateRental({
+		id: rentalId,
+		returnDate: formatDateISO(),
+		delayFee: rentalHelper.calculateDelayFee(rentDate, daysRented, pricePerDay),
 	})
 
 	return rental
@@ -85,5 +116,6 @@ const serviceFunction = async (rentalInfo) => {
 
 export {
 	listRentals,
-	sendRentals,
+	sendRental,
+	returnRental,
 }

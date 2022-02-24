@@ -24,7 +24,8 @@ const findGameByName = async ({ name }) => {
 			*
 		FROM
 			games
-		WHERE name = $1;
+		WHERE
+			name = $1;
 	`
 	const queryArgs = [name]
 	const gameResult = await connection.query(queryStr, queryArgs)
@@ -42,7 +43,8 @@ const findGameById = async ({ id }) => {
 			*
 		FROM
 			games
-		WHERE id = $1;
+		WHERE
+			id = $1;
 	`
 	const queryArgs = [id]
 	const gameResult = await connection.query(queryStr, queryArgs)

@@ -14,6 +14,21 @@ const findRentals = async ({ customerId, gameId }) => {
 	return rentalsResult.rows
 }
 
+const findRentalById = async ({ id }) => {
+	const queryStr = `
+		SELECT
+			*
+		FROM
+			rentals
+		WHERE
+			id = $1;
+	`
+	const queryArgs = [id]
+	const rentalsResult = await connection.query(queryStr, queryArgs)
+
+	return rentalsResult.rows[0]
+}
+
 
 const countGameRentals = async ({ gameId }) => {
 	const queryStr = `
@@ -73,8 +88,29 @@ const insertRental = async (rentalInfo) => {
 }
 
 
+const updateRental = async ({ id, returnDate, delayFee }) => {
+	const queryStr = `
+		UPDATE
+			rentals
+		SET
+			"returnDate" = $1,
+			"delayFee" = $2
+		WHERE
+				id = $3
+		RETURNING
+			*;
+	`
+	const queryArgs = [returnDate, delayFee, id]
+	const gameResult = await connection.query(queryStr, queryArgs)
+
+	return gameResult.rows[0]
+}
+
+
 export {
 	findRentals,
+	findRentalById,
 	countGameRentals,
 	insertRental,
+	updateRental,
 }
