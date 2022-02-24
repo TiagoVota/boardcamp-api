@@ -12,9 +12,9 @@ const findCustomers = async ({ cpf }) => {
 	`
 	const queryArgs = [`${cpf}%`]
 
-	const customersPromise = await connection.query(queryStr, queryArgs)
+	const customersResult = await connection.query(queryStr, queryArgs)
 
-	return customersPromise.rows
+	return customersResult.rows
 }
 
 
@@ -29,11 +29,11 @@ const findCustomerById = async ({ id }) => {
 	`
 	const queryArgs = [id]
 
-	const customerPromise = await connection.query(queryStr, queryArgs)
-	const customer = customerPromise.rows[0]
+	const customerResult = await connection.query(queryStr, queryArgs)
+	const customer = customerResult.rows[0]
 
 	if (!customer) return null
-	return customerPromise.rows[0]
+	return customerResult.rows[0]
 }
 
 
@@ -48,8 +48,8 @@ const findCustomerByCpf = async ({ cpf }) => {
 	`
 	const queryArgs = [cpf]
 
-	const customerPromise = await connection.query(queryStr, queryArgs)
-	const customer = customerPromise.rows[0]
+	const customerResult = await connection.query(queryStr, queryArgs)
+	const customer = customerResult.rows[0]
 
 	if (!customer) return null
 	return customer
@@ -68,9 +68,9 @@ const insertCustomer = async (customerInfo) => {
 	`
 	const queryArgs = [name, phone, cpf, birthday]
 
-	const customerPromise = await connection.query(queryStr, queryArgs)
+	const customerResult = await connection.query(queryStr, queryArgs)
 
-	return customerPromise.rows[0]
+	return customerResult.rows[0]
 }
 
 
@@ -91,9 +91,9 @@ const updateCustomer = async (customerInfo) => {
 	`
 	const queryArgs = [name, phone, cpf, birthday, id]
 
-	const customerPromise = await connection.query(queryStr, queryArgs)
+	const customerResult = await connection.query(queryStr, queryArgs)
 
-	return customerPromise.rows[0]
+	return customerResult.rows[0]
 }
 
 

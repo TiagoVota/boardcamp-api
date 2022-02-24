@@ -1,16 +1,16 @@
 import { Router } from 'express'
 
-// import * as exampleController from '../controllers/exampleController.js'
+import * as rentalController from '../controllers/rentalController.js'
 
 
 const router = new Router()
 
-// router.get('', exampleController.controllerFunction)
+router.get('', rentalController.getRentals)
 
-// router.post('', exampleController.controllerFunction)
-// router.post('/:rentalId/return', exampleController.controllerFunction)
+router.post('', rentalController.postRental)
+router.post('/:rentalId/return', rentalController.postReturnRental)
 
-// router.delete('/:rentalId', exampleController.controllerFunction)
+router.delete('/:rentalId', rentalController.deleteRental)
 
 
 export default router
