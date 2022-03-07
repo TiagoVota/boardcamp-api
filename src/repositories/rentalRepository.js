@@ -3,7 +3,7 @@ import * as queryStrHelper from '../helper/queryStrHelper.js'
 import connection from '../database/database.js'
 
 
-const findRentals = async ({ customerId, gameId }) => {
+const findRentals = async ({ customerId, gameId, limit, offset }) => {
 	const baseQueryStr = `
 		SELECT
 			r.*,
@@ -26,10 +26,16 @@ const findRentals = async ({ customerId, gameId }) => {
 			g."categoryId" = cat."id"
 	`
 
-	const { queryStr, queryArgs } = queryStrHelper.makeGetRentalQueryStr(
-		baseQueryStr,
-		customerId,
-		gameId
+	const {
+		queryStr: rentalQueryStr,
+		queryArgs: rentalQueryArgs
+	} = queryStrHelper.makeGetRentalQueryStr(baseQueryStr, customerId, gameId)
+
+	const {	queryStr,	queryArgs } = queryStrHelper.makePaginationQueryStr(
+		rentalQueryStr,
+		rentalQueryArgs,
+		offset,
+		limit
 	)
 
 	const rentalsResult = await connection.query(queryStr, queryArgs)

@@ -15,15 +15,20 @@ import RentalFinalizedError from '../errors/RentalFinalizedError.js'
 import SchemaError from '../errors/SchemaError.js'
 
 
-const listRentals = async ({ customerId, gameId }) => {
+const listRentals = async ({ customerId, gameId, limit, offset }) => {
 	const { isValidSchema, schemaErrorMsg } = validationErrors({
-		objectToValid: { customerId, gameId },
+		objectToValid: { customerId, gameId, limit, offset },
 		objectValidation: rentalSchema.rentalQuerySchema
 	})
 	
 	if (!isValidSchema) throw new SchemaError(schemaErrorMsg)
 
-	const rentals = await rentalRepository.findRentals({ customerId, gameId })
+	const rentals = await rentalRepository.findRentals({
+		customerId,
+		gameId,
+		limit,
+		offset
+	})
 
 	const sanitizedRentals = rentalHelper.sanitizeRentals(rentals)
 

@@ -5,6 +5,8 @@ import { numericRegex } from '../factories/regexFactory.js'
 
 const customerQuerySchema = Joi.object({
 	cpf: Joi.string().trim().pattern(numericRegex(0, 11)),
+	limit: Joi.number().integer().min(1),
+	offset: Joi.number().integer().min(1),
 })
 
 const customerIdSchema = Joi.object({

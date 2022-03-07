@@ -1,16 +1,24 @@
 import connection from '../database/database.js'
+import * as queryStrHelper from '../helper/queryStrHelper.js'
 
 
-const findCustomers = async ({ cpf }) => {
-	const queryStr = `
+const findCustomers = async ({ cpf, offset, limit }) => {
+	const baseQueryStr = `
 		SELECT
 			*
 		FROM
 			customers
 		WHERE
-			cpf LIKE $1;
+			cpf LIKE $1
 	`
-	const queryArgs = [`${cpf}%`]
+	const baseQueryArgs = [`${cpf}%`]
+
+	const {	queryStr,	queryArgs } = queryStrHelper.makePaginationQueryStr(
+		baseQueryStr,
+		baseQueryArgs,
+		offset,
+		limit
+	)
 
 	const customersResult = await connection.query(queryStr, queryArgs)
 

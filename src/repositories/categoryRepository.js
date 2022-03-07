@@ -1,14 +1,25 @@
+import * as queryStrHelper from '../helper/queryStrHelper.js'
+
 import connection from '../database/database.js'
 
 
-const findCategories = async () => {
-	const queryStr = `
+const findCategories = async ({ offset, limit }) => {
+	const baseQueryStr = `
 		SELECT
 			*
 		FROM
-			categories;
+			categories
 	`
-	const categoriesResult = await connection.query(queryStr)
+	const baseQueryArgs = []
+
+	const {	queryStr,	queryArgs } = queryStrHelper.makePaginationQueryStr(
+		baseQueryStr,
+		baseQueryArgs,
+		offset,
+		limit
+	)
+
+	const categoriesResult = await connection.query(queryStr, queryArgs)
 
 	return categoriesResult.rows
 }

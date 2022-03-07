@@ -2,7 +2,9 @@ import Joi from 'joi'
 
 
 const gameQuerySchema = Joi.object({
-	name: Joi.string().trim().min(0).max(255)
+	name: Joi.string().trim().min(0).max(255),
+	limit: Joi.number().integer().min(1),
+	offset: Joi.number().integer().min(1),
 })
 
 const gameSchema = Joi.object({
