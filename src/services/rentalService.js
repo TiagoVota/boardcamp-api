@@ -31,6 +31,25 @@ const listRentals = async ({ customerId, gameId }) => {
 }
 
 
+const getMetrics = async ({ startDate, endDate }) => {
+	const { isValidSchema, schemaErrorMsg } = validationErrors({
+		objectToValid: { startDate, endDate },
+		objectValidation: rentalSchema.rentalMetricsQuerySchema
+	})
+	
+	if (!isValidSchema) throw new SchemaError(schemaErrorMsg)
+
+	const metrics = await rentalRepository.findMetrics({ startDate, endDate })
+	const { revenue, rentals } = metrics
+
+	return {
+		revenue: Number(revenue),
+		rentals: Number(rentals),
+		average: revenue / rentals,
+	}
+}
+
+
 const sendRental = async ({ rentalInfo }) => {
 	const { isValidSchema, schemaErrorMsg } = validationErrors({
 		objectToValid: rentalInfo,
@@ -127,6 +146,7 @@ const removeRental = async ({ rentalId }) => {
 
 export {
 	listRentals,
+	getMetrics,
 	sendRental,
 	returnRental,
 	removeRental,

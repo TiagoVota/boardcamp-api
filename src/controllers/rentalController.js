@@ -15,6 +15,20 @@ const getRentals = async (req, res, next) => {
 }
 
 
+const getRentalMetrics = async (req, res, next) => {
+	const { query: { startDate, endDate } } = req
+	
+	try {
+		const metrics = await rentalService.getMetrics({ startDate, endDate })
+		
+		return res.status(200).send(metrics)
+
+	} catch (error) {		
+		next(error)
+	}
+}
+
+
 const postRental = async (req, res, next) => {
 	const { body: rentalInfo } = req
 
@@ -58,6 +72,7 @@ const deleteRental = async (req, res, next) => {
 
 export {
 	getRentals,
+	getRentalMetrics,
 	postRental,
 	postReturnRental,
 	deleteRental,

@@ -37,6 +37,24 @@ const findRentals = async ({ customerId, gameId }) => {
 	return rentalsResult.rows
 }
 
+
+const findMetrics = async ({ startDate, endDate }) => {
+	const queryStr = `
+		SELECT
+			COUNT(id) AS rentals,
+			SUM("originalPrice" + "delayFee") AS revenue
+		FROM
+			rentals
+		WHERE
+			"returnDate" IS NOT null;
+	`
+
+	const metricsResult = await connection.query(queryStr)
+
+	return metricsResult.rows[0]
+}
+
+
 const findRentalById = async ({ id }) => {
 	const queryStr = `
 		SELECT
@@ -148,6 +166,7 @@ const deleteRental = async ({ id }) => {
 
 export {
 	findRentals,
+	findMetrics,
 	findRentalById,
 	countGameRentals,
 	insertRental,
