@@ -1,8 +1,10 @@
+import * as queryStrHelper from '../helper/queryStrHelper.js'
+
 import connection from '../database/database.js'
 
 
-const findGames = async ({ name }) => {
-	const queryStr = `
+const findGames = async ({ name, limit, offset }) => {
+	const baseQueryStr = `
 		SELECT
 			g.*,
 			c.name AS "categoryName"
@@ -13,9 +15,16 @@ const findGames = async ({ name }) => {
 		ON
 			g."categoryId" = c.id
 		WHERE
-			g.name ILIKE $1;
+			g.name ILIKE $1
 	`
-	const queryArgs = [`${name}%`]
+	const baseQueryArgs = [`${name}%`]
+
+	const {	queryStr,	queryArgs } = queryStrHelper.makePaginationQueryStr(
+		baseQueryStr,
+		baseQueryArgs,
+		offset,
+		limit
+	)
 
 	const gamesResult = await connection.query(queryStr, queryArgs)
 

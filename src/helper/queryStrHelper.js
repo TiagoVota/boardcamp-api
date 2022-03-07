@@ -16,8 +16,6 @@ const makeGetRentalQueryStr = (baseQueryStr, customerId, gameId) => {
 		queryStr += `r."gameId" = $${queryArgs.length}`
 	}
 
-	queryStr += ';'
-
 
 	return {
 		queryStr,
@@ -56,7 +54,32 @@ const makeGetMetricsQueryStr = (baseQueryStr, startDate, endDate) => {
 }
 
 
+const makePaginationQueryStr = (baseQueryStr, baseQueryArgs, offset, limit) => {
+	let queryStr = baseQueryStr
+	const queryArgs = [ ...baseQueryArgs ]
+
+	if (offset) {
+		queryArgs.push(offset)
+		queryStr += ` OFFSET $${queryArgs.length} `
+	}
+
+	if (limit) {
+		queryArgs.push(limit)
+		queryStr += ` LIMIT $${queryArgs.length} `
+	}
+
+	queryStr += ';'
+
+	
+	return {
+		queryStr,
+		queryArgs,
+	}
+}
+
+
 export { 
 	makeGetRentalQueryStr,
 	makeGetMetricsQueryStr,
+	makePaginationQueryStr,
 }

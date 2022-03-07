@@ -2,8 +2,10 @@ import * as categoryService from '../services/categoryService.js'
 
 
 const getCategories = async (req, res, next) => {
+	const { query: { limit, offset } } = req
+
 	try {
-		const categories = await categoryService.listCategories()
+		const categories = await categoryService.listCategories({ limit, offset })
 		
 		return res.status(200).send(categories)
 

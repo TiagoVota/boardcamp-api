@@ -11,15 +11,19 @@ import InexistentIdError from '../errors/InexistentIdError.js'
 import SchemaError from '../errors/SchemaError.js'
 
 
-const listCustomers = async ({ cpf }) => {
+const listCustomers = async ({ cpf, limit, offset }) => {
 	const { isValidSchema, schemaErrorMsg } = validationErrors({
-		objectToValid: { cpf },
+		objectToValid: { cpf, limit, offset },
 		objectValidation: customerSchema.customerQuerySchema
 	})
 	
 	if (!isValidSchema) throw new SchemaError(schemaErrorMsg)
 
-	const customers = await customerRepository.findCustomers({ cpf: cpf || '' })
+	const customers = await customerRepository.findCustomers({
+		cpf: cpf || '',
+		limit,
+		offset,
+	})
 
 	return customers
 }

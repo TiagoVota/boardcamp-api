@@ -10,15 +10,19 @@ import InexistentIdError from '../errors/InexistentIdError.js'
 import SchemaError from '../errors/SchemaError.js'
 
 
-const listGames = async ({ name }) => {
+const listGames = async ({ name, limit, offset }) => {
 	const { isValidSchema, schemaErrorMsg } = validationErrors({
-		objectToValid: { name },
+		objectToValid: { name, limit, offset },
 		objectValidation: gameSchema.gameQuerySchema
 	})
 
 	if (!isValidSchema) throw new SchemaError(schemaErrorMsg)
 	
-	const games = await gameRepository.findGames({ name: name || '' })
+	const games = await gameRepository.findGames({
+		name: name || '',
+		limit,
+		offset
+	})
 
 	return games
 }
