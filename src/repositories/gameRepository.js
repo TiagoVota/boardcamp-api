@@ -7,15 +7,22 @@ const findGames = async ({ name, limit, offset }) => {
 	const baseQueryStr = `
 		SELECT
 			g.*,
-			c.name AS "categoryName"
+			c.name AS "categoryName",
+			COUNT(r.id) AS "rentalsCount"
 		FROM
 			games AS g
 		JOIN
 			categories AS c
 		ON
 			g."categoryId" = c.id
+		LEFT JOIN
+			rentals AS r
+		ON 
+			g.id = r."gameId"
 		WHERE
 			g.name ILIKE $1
+		GROUP BY
+			g.id, c.name
 	`
 	const baseQueryArgs = [`${name}%`]
 

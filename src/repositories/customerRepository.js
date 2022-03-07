@@ -5,11 +5,18 @@ import * as queryStrHelper from '../helper/queryStrHelper.js'
 const findCustomers = async ({ cpf, offset, limit }) => {
 	const baseQueryStr = `
 		SELECT
-			*
+			c.*,
+			COUNT(r.id) AS "rentalsCount"
 		FROM
-			customers
+			customers AS c
+		LEFT JOIN
+			rentals AS r
+		ON 
+			c.id = r."customerId"
 		WHERE
 			cpf LIKE $1
+		GROUP BY
+			c.id
 	`
 	const baseQueryArgs = [`${cpf}%`]
 
