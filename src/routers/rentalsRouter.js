@@ -6,6 +6,7 @@ import * as rentalController from '../controllers/rentalController.js'
 const router = new Router()
 
 router.get('', rentalController.getRentals)
+router.get('/metrics', rentalController.getRentalMetrics)
 
 router.post('', rentalController.postRental)
 router.post('/:rentalId/return', rentalController.postReturnRental)

@@ -6,6 +6,11 @@ const rentalQuerySchema = Joi.object({
 	gameId: Joi.number().integer().min(1),
 })
 
+const rentalMetricsQuerySchema = Joi.object({
+	startDate: Joi.date().iso(),
+	endDate: Joi.date().iso(),
+})
+
 const rentalSchema = Joi.object({
 	customerId: Joi.number().integer().min(1).required(),
 	gameId: Joi.number().integer().min(1).required(),
@@ -18,6 +23,7 @@ const rentalIdSchema = Joi.object({
 
 export {
 	rentalQuerySchema,
+	rentalMetricsQuerySchema,
 	rentalSchema,
 	rentalIdSchema,
 }
