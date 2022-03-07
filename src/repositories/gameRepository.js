@@ -3,7 +3,17 @@ import * as queryStrHelper from '../helper/queryStrHelper.js'
 import connection from '../database/database.js'
 
 
-const findGames = async ({ name, limit, offset }) => {
+const findGames = async ({ name, limit, offset, order, desc }) => {
+	const orderByFilters = {
+		id: 1,
+		name: 2,
+		stockTotal: 4,
+		categoryId: 5,
+		pricePerDay: 6,
+		categoryName: 7,
+		rentalsCount: 8,
+	}
+
 	const baseQueryStr = `
 		SELECT
 			g.*,
@@ -23,6 +33,7 @@ const findGames = async ({ name, limit, offset }) => {
 			g.name ILIKE $1
 		GROUP BY
 			g.id, c.name
+		${queryStrHelper.makeOrderByQuery(order, orderByFilters, desc)}
 	`
 	const baseQueryArgs = [`${name}%`]
 

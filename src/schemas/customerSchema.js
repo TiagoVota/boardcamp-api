@@ -7,6 +7,8 @@ const customerQuerySchema = Joi.object({
 	cpf: Joi.string().trim().pattern(numericRegex(0, 11)),
 	limit: Joi.number().integer().min(1),
 	offset: Joi.number().integer().min(1),
+	order: Joi.string(),
+	desc: Joi.boolean(),
 })
 
 const customerIdSchema = Joi.object({

@@ -5,6 +5,8 @@ const gameQuerySchema = Joi.object({
 	name: Joi.string().trim().min(0).max(255),
 	limit: Joi.number().integer().min(1),
 	offset: Joi.number().integer().min(1),
+	order: Joi.string(),
+	desc: Joi.boolean(),
 })
 
 const gameSchema = Joi.object({

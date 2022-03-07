@@ -78,8 +78,16 @@ const makePaginationQueryStr = (baseQueryStr, baseQueryArgs, offset, limit) => {
 }
 
 
+const makeOrderByQuery = (order, orderByFilters, desc) => {
+	return Boolean(order && orderByFilters[order])
+		? ` ORDER BY ${orderByFilters[order]} ${desc ? 'DESC' : ''} `
+		: ''
+}
+
+
 export { 
 	makeGetRentalQueryStr,
 	makeGetMetricsQueryStr,
 	makePaginationQueryStr,
+	makeOrderByQuery,
 }

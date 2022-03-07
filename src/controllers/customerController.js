@@ -2,13 +2,15 @@ import * as customerService from '../services/customerService.js'
 
 
 const getCustomers = async (req, res, next) => {
-	const { query: { cpf, limit, offset } } = req
+	const { query: { cpf, limit, offset, order, desc } } = req
 
 	try {
 		const customers = await customerService.listCustomers({
 			cpf,
 			limit,
-			offset
+			offset,
+			order,
+			desc,
 		})
 		
 		return res.status(200).send(customers)
