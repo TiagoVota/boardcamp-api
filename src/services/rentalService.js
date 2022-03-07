@@ -45,7 +45,7 @@ const getMetrics = async ({ startDate, endDate }) => {
 	return {
 		revenue: Number(revenue),
 		rentals: Number(rentals),
-		average: revenue / rentals,
+		average: revenue / rentals || 0,
 	}
 }
 

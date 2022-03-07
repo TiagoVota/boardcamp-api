@@ -39,17 +39,21 @@ const findRentals = async ({ customerId, gameId }) => {
 
 
 const findMetrics = async ({ startDate, endDate }) => {
-	const queryStr = `
+	const baseQueryStr = `
 		SELECT
 			COUNT(id) AS rentals,
 			SUM("originalPrice" + "delayFee") AS revenue
 		FROM
 			rentals
-		WHERE
-			"returnDate" IS NOT null;
 	`
 
-	const metricsResult = await connection.query(queryStr)
+	const { queryStr, queryArgs } = queryStrHelper.makeGetMetricsQueryStr(
+		baseQueryStr,
+		startDate,
+		endDate
+	)
+		
+	const metricsResult = await connection.query(queryStr, queryArgs)
 
 	return metricsResult.rows[0]
 }
