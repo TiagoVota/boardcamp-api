@@ -3,7 +3,7 @@ import * as queryStrHelper from '../helper/queryStrHelper.js'
 import connection from '../database/database.js'
 
 
-const findCustomers = async ({ cpf, offset, limit, order, desc }) => {
+const findCustomers = async ({ cpf, offset, limit, order, isDesc }) => {
 	const orderByFilters = {
 		id: 1,
 		name: 2,
@@ -27,7 +27,7 @@ const findCustomers = async ({ cpf, offset, limit, order, desc }) => {
 			cpf LIKE $1
 		GROUP BY
 			c.id
-		${queryStrHelper.makeOrderByQuery(order, orderByFilters, desc)}
+		${queryStrHelper.makeOrderByQuery(order, orderByFilters, isDesc)}
 	`
 	const baseQueryArgs = [`${cpf}%`]
 

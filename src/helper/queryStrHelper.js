@@ -1,20 +1,48 @@
-const makeGetRentalQueryStr = (baseQueryStr, customerId, gameId) => {
+const makeGetRentalQueryStr = (baseQueryStr, queryParams) => {
+	const { customerId, gameId, status, startDate, endDate } = queryParams
+
 	let queryStr = baseQueryStr
 	const queryArgs = []
 
-	if (customerId || gameId) queryStr += ' WHERE '
+	if (Object.keys(queryParams).length !== 0) queryStr += ' WHERE '
 
+	let customerStr = '1 = 1'
 	if (customerId) {
 		queryArgs.push(customerId)
-		queryStr += `r."customerId" = $${queryArgs.length}`
+		customerStr = `r."customerId" = $${queryArgs.length}`
 	}
+	queryStr += `${customerStr} AND `
 
-	if (customerId && gameId) queryStr += ' AND '
-
+	let gameStr = '1 = 1'
 	if (gameId) {
 		queryArgs.push(gameId)
-		queryStr += `r."gameId" = $${queryArgs.length}`
+		gameStr = `r."gameId" = $${queryArgs.length}`
 	}
+	queryStr += `${gameStr} AND `
+
+	let statusStr = '1 = 1'
+	if (isValidStatus(status)) {
+		const statusOperator = Boolean(status.toLowerCase() === 'open')
+			? 'IS'
+			: 'IS NOT'
+		
+		statusStr = `r."returnDate" ${statusOperator} NULL`
+	}
+	queryStr += `${statusStr} AND `
+
+	let startDateStr = '1 = 1'
+	if (startDate) {
+		queryArgs.push(startDate)
+		startDateStr = `r."rentDate" >= $${queryArgs.length}`
+	}
+	queryStr += `${startDateStr} AND `
+
+	let endDateStr = '1 = 1'
+	if (endDate) {
+		queryArgs.push(endDate)
+		endDateStr = `r."rentDate" <= $${queryArgs.length}`
+	}
+	queryStr += `${endDateStr} `
 
 
 	return {
@@ -23,8 +51,14 @@ const makeGetRentalQueryStr = (baseQueryStr, customerId, gameId) => {
 	}
 }
 
+const isValidStatus = (status) => {
+	return ['open', 'closed'].includes(status?.toLowerCase())
+}
 
-const makeGetMetricsQueryStr = (baseQueryStr, startDate, endDate) => {
+
+const makeGetMetricsQueryStr = (baseQueryStr, queryParams) => {
+	const { startDate, endDate } = queryParams
+
 	let queryStr = baseQueryStr
 	const queryArgs = []
 
@@ -78,9 +112,9 @@ const makePaginationQueryStr = (baseQueryStr, baseQueryArgs, offset, limit) => {
 }
 
 
-const makeOrderByQuery = (order, orderByFilters, desc) => {
+const makeOrderByQuery = (order, orderByFilters, isDesc) => {
 	return Boolean(order && orderByFilters[order])
-		? ` ORDER BY ${orderByFilters[order]} ${desc ? 'DESC' : ''} `
+		? ` ORDER BY ${orderByFilters[order]} ${isDesc ? 'DESC' : ''} `
 		: ''
 }
 

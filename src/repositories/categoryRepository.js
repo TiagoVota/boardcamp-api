@@ -3,7 +3,7 @@ import * as queryStrHelper from '../helper/queryStrHelper.js'
 import connection from '../database/database.js'
 
 
-const findCategories = async ({ offset, limit, order, desc }) => {
+const findCategories = async ({ offset, limit, order, isDesc }) => {
 	const orderByFilters = {
 		id: 1,
 		name: 2
@@ -14,7 +14,7 @@ const findCategories = async ({ offset, limit, order, desc }) => {
 			*
 		FROM
 			categories
-		${queryStrHelper.makeOrderByQuery(order, orderByFilters, desc)}
+		${queryStrHelper.makeOrderByQuery(order, orderByFilters, isDesc)}
 	`
 	const baseQueryArgs = []
 

@@ -4,6 +4,7 @@ import * as gameRepository from '../repositories/gameRepository.js'
 import * as gameSchema from '../schemas/gameSchema.js'
 
 import { validationErrors } from '../validations/handleValidation.js'
+import { boolStrToBool } from '../utils/stringManipulator.js'
 
 import ConflictAttributeError from '../errors/ConflictAttributeError.js'
 import InexistentIdError from '../errors/InexistentIdError.js'
@@ -23,7 +24,7 @@ const listGames = async ({ name, limit, offset, order, desc }) => {
 		limit,
 		offset,
 		order,
-		desc: desc?.toLowerCase() === 'true' || false,
+		isDesc: boolStrToBool(desc),
 	})
 
 	return games
