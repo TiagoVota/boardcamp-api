@@ -2,7 +2,19 @@ import * as rentalService from '../services/rentalService.js'
 
 
 const getRentals = async (req, res, next) => {
-	const { query: { customerId, gameId, limit, offset, order, desc } } = req
+	const { 
+		query: {
+			customerId,
+			gameId,
+			limit,
+			offset,
+			order,
+			desc,
+			status,
+			startDate,
+			endDate,
+		}
+	} = req
 
 	try {
 		const rentals = await rentalService.listRentals({
@@ -12,6 +24,9 @@ const getRentals = async (req, res, next) => {
 			offset,
 			order,
 			desc,
+			status,
+			startDate,
+			endDate,
 		})
 		
 		return res.status(200).send(rentals)

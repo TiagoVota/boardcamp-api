@@ -8,6 +8,7 @@ import * as rentalHelper from '../helper/rentalHelper.js'
 
 import { validationErrors } from '../validations/handleValidation.js'
 import { formatDateISO } from '../utils/dayjs.service.js'
+import { boolStrToBool } from '../utils/stringManipulator.js'
 
 import InexistentIdError from '../errors/InexistentIdError.js'
 import NoStockError from '../errors/NoStockError.js'
@@ -16,10 +17,20 @@ import SchemaError from '../errors/SchemaError.js'
 
 
 const listRentals = async (params) => {
-	const { customerId, gameId, limit, offset, order, desc } = params
+	const {
+		customerId,
+		gameId,
+		limit,
+		offset,
+		order,
+		desc,
+		status,
+		startDate,
+		endDate,
+	} = params
 
 	const { isValidSchema, schemaErrorMsg } = validationErrors({
-		objectToValid: { customerId, gameId, limit, offset, order, desc },
+		objectToValid: params,
 		objectValidation: rentalSchema.rentalQuerySchema
 	})
 	
@@ -31,7 +42,10 @@ const listRentals = async (params) => {
 		limit,
 		offset,
 		order,
-		desc: desc?.toLowerCase() === 'true' || false,
+		isDesc: boolStrToBool(desc),
+		status,
+		startDate,
+		endDate,
 	})
 
 	const sanitizedRentals = rentalHelper.sanitizeRentals(rentals)

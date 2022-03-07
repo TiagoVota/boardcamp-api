@@ -5,6 +5,7 @@ import * as customerSchema from '../schemas/customerSchema.js'
 import * as customerHelper from '../helper/customerHelper.js'
 
 import { validationErrors } from '../validations/handleValidation.js'
+import { boolStrToBool } from '../utils/stringManipulator.js'
 
 import ConflictAttributeError from '../errors/ConflictAttributeError.js'
 import InexistentIdError from '../errors/InexistentIdError.js'
@@ -24,7 +25,7 @@ const listCustomers = async ({ cpf, limit, offset, order, desc }) => {
 		limit,
 		offset,
 		order,
-		desc: desc?.toLowerCase() === 'true' || false,
+		isDesc: boolStrToBool(desc),
 	})
 
 	return customers

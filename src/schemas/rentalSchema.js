@@ -8,6 +8,9 @@ const rentalQuerySchema = Joi.object({
 	offset: Joi.number().integer().min(1),
 	order: Joi.string(),
 	desc: Joi.boolean(),
+	status: Joi.string().trim().lowercase(),
+	startDate: Joi.date().iso(),
+	endDate: Joi.date().iso(),
 })
 
 const rentalMetricsQuerySchema = Joi.object({

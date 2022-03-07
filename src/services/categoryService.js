@@ -3,6 +3,7 @@ import * as categoryRepository from '../repositories/categoryRepository.js'
 import * as categorySchema from '../schemas/categorySchema.js'
 
 import { validationErrors } from '../validations/handleValidation.js'
+import { boolStrToBool } from '../utils/stringManipulator.js'
 
 import SchemaError from '../errors/SchemaError.js'
 import ConflictAttributeError from '../errors/ConflictAttributeError.js'
@@ -20,7 +21,7 @@ const listCategories = async ({ limit, offset, order, desc }) => {
 		limit,
 		offset,
 		order,
-		desc: desc?.toLowerCase() === 'true' || false,
+		isDesc: boolStrToBool(desc),
 	})
 
 	return categories

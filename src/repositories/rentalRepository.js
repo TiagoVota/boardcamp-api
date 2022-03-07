@@ -4,7 +4,17 @@ import connection from '../database/database.js'
 
 
 const findRentals = async (params) => {
-	const { customerId, gameId, limit, offset, order, desc } = params
+	const {
+		customerId,
+		gameId,
+		limit,
+		offset,
+		order,
+		isDesc,
+		status,
+		startDate,
+		endDate,
+	} = params
 
 	const orderByFilters = {
 		id: 1,
@@ -24,7 +34,7 @@ const findRentals = async (params) => {
 	const orderByQueryStr = queryStrHelper.makeOrderByQuery(
 		order,
 		orderByFilters,
-		desc
+		isDesc
 	)
 
 	const baseQueryStr = `
@@ -52,7 +62,10 @@ const findRentals = async (params) => {
 	const {
 		queryStr: rentalQueryStr,
 		queryArgs: rentalQueryArgs
-	} = queryStrHelper.makeGetRentalQueryStr(baseQueryStr, customerId, gameId)
+	} = queryStrHelper.makeGetRentalQueryStr(
+		baseQueryStr,
+		{ customerId, gameId, status, startDate, endDate }
+	)
 
 	const rentalWithOrderQueryStr = `
 		${rentalQueryStr}
@@ -83,8 +96,7 @@ const findMetrics = async ({ startDate, endDate }) => {
 
 	const { queryStr, queryArgs } = queryStrHelper.makeGetMetricsQueryStr(
 		baseQueryStr,
-		startDate,
-		endDate
+		{ startDate, endDate }
 	)
 		
 	const metricsResult = await connection.query(queryStr, queryArgs)
