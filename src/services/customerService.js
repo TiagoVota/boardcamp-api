@@ -11,9 +11,9 @@ import InexistentIdError from '../errors/InexistentIdError.js'
 import SchemaError from '../errors/SchemaError.js'
 
 
-const listCustomers = async ({ cpf, limit, offset }) => {
+const listCustomers = async ({ cpf, limit, offset, order, desc }) => {
 	const { isValidSchema, schemaErrorMsg } = validationErrors({
-		objectToValid: { cpf, limit, offset },
+		objectToValid: { cpf, limit, offset, order, desc },
 		objectValidation: customerSchema.customerQuerySchema
 	})
 	
@@ -23,6 +23,8 @@ const listCustomers = async ({ cpf, limit, offset }) => {
 		cpf: cpf || '',
 		limit,
 		offset,
+		order,
+		desc: desc?.toLowerCase() === 'true' || false,
 	})
 
 	return customers

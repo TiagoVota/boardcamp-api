@@ -2,10 +2,16 @@ import * as gameService from '../services/gameService.js'
 
 
 const getGames = async (req, res, next) => {
-	const { query: { name, limit, offset } } = req
+	const { query: { name, limit, offset, order, desc } } = req
 
 	try {
-		const games = await gameService.listGames({ name, limit, offset })
+		const games = await gameService.listGames({
+			name,
+			limit,
+			offset,
+			order,
+			desc,
+		})
 		
 		return res.status(200).send(games)
 

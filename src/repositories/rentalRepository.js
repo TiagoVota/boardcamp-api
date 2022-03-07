@@ -3,7 +3,30 @@ import * as queryStrHelper from '../helper/queryStrHelper.js'
 import connection from '../database/database.js'
 
 
-const findRentals = async ({ customerId, gameId, limit, offset }) => {
+const findRentals = async (params) => {
+	const { customerId, gameId, limit, offset, order, desc } = params
+
+	const orderByFilters = {
+		id: 1,
+		customerId: 2,
+		gameId: 3,
+		rentDate: 4,
+		daysRented: 5,
+		returnDate: 6,
+		originalPrice: 7,
+		delayFee: 8,
+		customerName: 9,
+		gameName: 10,
+		categoryId: 11,
+		categoryName: 12,
+	}
+
+	const orderByQueryStr = queryStrHelper.makeOrderByQuery(
+		order,
+		orderByFilters,
+		desc
+	)
+
 	const baseQueryStr = `
 		SELECT
 			r.*,
@@ -31,8 +54,13 @@ const findRentals = async ({ customerId, gameId, limit, offset }) => {
 		queryArgs: rentalQueryArgs
 	} = queryStrHelper.makeGetRentalQueryStr(baseQueryStr, customerId, gameId)
 
+	const rentalWithOrderQueryStr = `
+		${rentalQueryStr}
+		${orderByQueryStr}
+	`
+
 	const {	queryStr,	queryArgs } = queryStrHelper.makePaginationQueryStr(
-		rentalQueryStr,
+		rentalWithOrderQueryStr,
 		rentalQueryArgs,
 		offset,
 		limit

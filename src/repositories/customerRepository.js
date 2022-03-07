@@ -1,8 +1,18 @@
-import connection from '../database/database.js'
 import * as queryStrHelper from '../helper/queryStrHelper.js'
 
+import connection from '../database/database.js'
 
-const findCustomers = async ({ cpf, offset, limit }) => {
+
+const findCustomers = async ({ cpf, offset, limit, order, desc }) => {
+	const orderByFilters = {
+		id: 1,
+		name: 2,
+		phone: 3,
+		cpf: 4,
+		birthday: 5,
+		rentalsCount: 6,
+	}
+	
 	const baseQueryStr = `
 		SELECT
 			c.*,
@@ -17,6 +27,7 @@ const findCustomers = async ({ cpf, offset, limit }) => {
 			cpf LIKE $1
 		GROUP BY
 			c.id
+		${queryStrHelper.makeOrderByQuery(order, orderByFilters, desc)}
 	`
 	const baseQueryArgs = [`${cpf}%`]
 
